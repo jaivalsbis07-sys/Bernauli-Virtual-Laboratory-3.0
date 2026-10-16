@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bernoulli’s Theorem Verification Lab</title>
+  <meta name="description" content="An Interactive Fluid Mechanics Experiment: Verification of Bernoulli's Theorem using perspex duct apparatus and digital hydraulic bench.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Chart.js CDN for interactive hydraulic gradient graphs -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E%E2%9A%97%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-theme="dark">
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+  <!-- Top Sticky Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="#hero" class="brand-logo">
+        <span class="logo-symbol">⚗</span>
+        <span class="logo-text">Bernoulli<span class="accent">Lab</span></span>
+      </a>
+      <nav class="nav-menu" id="navMenu">
+        <a href="#aim">Aim</a>
+        <a href="#theory">Theory</a>
+        <a href="#apparatus">Apparatus</a>
+        <a href="#procedure">Procedure</a>
+        <a href="#simulation">Simulation</a>
+        <a href="#custom-simulation">Custom Sim</a>
+        <a href="#multi-experiment">Multi-Flow Exp</a>
+        <a href="#observations">Observations</a>
+        <a href="#calculations">Calculations</a>
+        <a href="#graphs">Graphs</a>
+        <a href="#results">Results</a>
+        <a href="#quiz">Quiz</a>
+        <a href="#conclusion">Conclusion</a>
+        <a href="#credits">Credits</a>
+      </nav>
+      <div class="nav-controls">
+        <button id="themeToggleBtn" class="control-btn" title="Toggle Theme" aria-label="Toggle Theme">🌓</button>
+        <button id="motionToggleBtn" class="control-btn" title="Toggle Reduced Motion" aria-label="Toggle Reduced Motion" aria-pressed="false">⚡</button>
+        <button id="fullscreenBtn" class="control-btn" title="Full Screen Lab Mode" aria-label="Full Screen Lab Mode">⛶</button>
+        <button id="hamburgerBtn" class="hamburger-btn" aria-label="Open Navigation" aria-expanded="false" aria-controls="navMenu">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="hero" class="hero-section">
+    <canvas id="heroFlowCanvas" class="hero-canvas"></canvas>
+    <div class="hero-content">
+      <span class="badge">FLUID MECHANICS LABORATORY • EXPERIMENT NO: 4</span>
+      <h1 class="hero-title">Verification of Bernoulli’s Theorem</h1>
+      <p class="hero-subtitle">Explore the relationship between pressure head, velocity head, and total head.</p>
+      
+      <div class="hero-actions">
+        <a href="#simulation" class="btn btn-primary">Start Experiment</a>
+        <a href="#theory" class="btn btn-outline">Explore Theory</a>
+      </div>
+
+      <div class="hero-stats-grid">
+        <div class="stat-card glass-card">
+          <span class="stat-icon">🧪</span>
+          <div class="stat-meta">
+            <span class="stat-label">Experiment Type</span>
+            <span class="stat-value">Fluid Mechanics</span>
+          </div>
+        </div>
+        <div class="stat-card glass-card">
+          <span class="stat-icon">⚖</span>
+          <div class="stat-meta">
+            <span class="stat-label">Governing Principle</span>
+            <span class="stat-value">Conservation of Mechanical Energy</span>
+          </div>
+        </div>
+        <div class="stat-card glass-card">
+          <span class="stat-icon">📊</span>
+          <div class="stat-meta">
+            <span class="stat-label">Evaluation Mode</span>
+            <span class="stat-value">Interactive Verification (20 Marks)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="main-content">
+    <noscript><p style="padding:1rem;border:1px solid currentColor;">This lab needs JavaScript for the simulation, tables, graph and quiz. Please enable it in your browser.</p></noscript>
+    
+    <!-- Aim Section -->
+    <section id="aim" class="section-container">
+      <div class="section-header">
+        <span class="section-tag">Objective</span>
+        <h2>Aim of the Experiment</h2>
+      </div>
+      <div class="highlight-card glass-card aim-card">
+        <div class="aim-icon-container">
+          <div class="pulsing-circle"></div>
+          <span class="laboratory-icon">🎯</span>
+        </div>
+        <div class="aim-text">
+          <h3 class="highlight-quote">"To verify the Bernoulli's theorem for liquids."</h3>
+          <p class="aim-subtext">Verification across a variable area perspex convergent-divergent duct under steady, incompressible liquid flow conditions.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Theory Section -->
+    <section id="theory" class="section-container">
+      <div class="section-header">
+        <span class="section-tag">Fundamentals</span>
+        <h2>Theoretical Background</h2>
+      </div>
+      
+      <div class="glass-card content-card">
+        <h3>Basic Concept</h3>
+        <blockquote class="manual-quote">
+          "According to Bernoulli's theorem, for an ideal, steady, incompressible and irrotational fluid, the sum of pressure energy, kinetic energy and potential energy is constant along a streamline."
+        </blockquote>
+
+        <div class="equation-showcase">
+          <span class="eq-label">Total Energy Equation:</span>
+          <div class="math-banner">
+            <span class="eq-term" data-term="p-head" tabindex="0" role="button" aria-label="Pressure head term: p over gamma">
+              <span class="term-num">p</span><span class="term-denom">γ</span>
+            </span>
+            <span class="eq-op">+</span>
+            <span class="eq-term" data-term="v-head" tabindex="0" role="button" aria-label="Velocity head term: v squared over 2g">
+              <span class="term-num">v²</span><span class="term-denom">2g</span>
+            </span>
+            <span class="eq-op">+</span>
+            <span class="eq-term" data-term="z-head" tabindex="0" role="button" aria-label="Datum head term: Z">
+              <span class="term-var">Z</span>
+            </span>
+            <span class="eq-op">=</span>
+            <span class="eq-term" data-term="total-head" tabindex="0" role="button" aria-label="Total Head constant">
+              <span class="term-const">Constant (Total Head)</span>
+            </span>
+          </div>
+          <p class="hint-text">💡 Click or focus on any equation component above to explore its manual definition and physical meaning.</p>
+        </div>
+
+        <!-- Term Detail Dynamic Card -->
+        <div id="termDetailBox" class="term-detail-box info-callout">
+          <h4 id="termDetailTitle">Select a term from the equation above</h4>
+          <p id="termDetailDesc">Clicking on any individual energy component reveals its laboratory notation, dimensional unit, and practical significance according to the lab manual.</p>
+          <div class="term-badges">
+            <span id="termDetailUnit" class="pill-badge">Unit: —</span>
+            <span id="termDetailSymbol" class="pill-badge">Symbol: —</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="glass-card content-card lab-extra">
+        <h3>When Bernoulli's equation applies</h3>
+        <ul>
+          <li><strong>Steady flow:</strong> Velocity and pressure at a point do not change with time.</li>
+          <li><strong>Incompressible fluid:</strong> Constant density, which is an accurate assumption for water.</li>
+          <li><strong>No friction (inviscid):</strong> Real ducts lose slight head to wall friction, causing total head to drop slightly at h<sub>6</sub>.</li>
+          <li><strong>Along one streamline:</strong> Irrotational flow throughout.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Apparatus Section -->
+    <section id="apparatus" class="section-container">
+      <div class="section-header">
+        <span class="section-tag">Instrumentation</span>
+        <h2>Experimental Apparatus</h2>
+      </div>
+
+      <div class="apparatus-grid">
+        <div class="glass-card apparatus-list-card">
+          <h3>Required Equipment &amp; Tapping Specifications</h3>
+          <p class="small-desc"><strong>Specification:</strong> Diameter of tappings in the venturi = 25 mm, 13.9 mm, 11.8 mm, 10.7 mm, 10 mm, and 25 mm.</p>
+          <ul class="apparatus-checklist">
+            <li class="app-item">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>1. Bernoulli's apparatus</strong>
+                <p>Clear perspex convergent-divergent duct fitted with 6 static pressure manometer tubes (tappings h₁ through h₆).</p>
+              </div>
+            </li>
+            <li class="app-item">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>2. Digital Hydraulic Bench</strong>
+                <p>Equipped with collection tank, sump tank, pump, and flow control valve to accurately measure discharge.</p>
+              </div>
+            </li>
+            <li class="app-item">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>3. Stopwatch</strong>
+                <p>For measuring the time to collect a fixed volume V = 1 L (t₁ = 13.87 s, t₂ = 10.82 s, t₃ = 9.83 s).</p>
+              </div>
+            </li>
+          </ul>
+
+          <div class="control-row">
+            <button id="toggleLabelsBtn" class="btn btn-secondary">Hide Tapping Labels</button>
+            <button id="inspectAllBtn" class="btn btn-outline">Overview Hotspots</button>
+          </div>
+        </div>
+
+        <div class="glass-card apparatus-diagram-card">
+          <div class="diagram-toolbar">
+            <span class="diag-title">Interactive Perspex Duct &amp; Manometer Assembly</span>
+            <span class="diag-status" id="hotspotStatus">Click any highlighted tapping to view section metadata</span>
+          </div>
+
+          <div class="svg-container">
+            <svg id="apparatusSvg" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid meet">
+              <defs>
+                <linearGradient id="perspexGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.25"/>
+                  <stop offset="50%" stop-color="#0284c7" stop-opacity="0.1"/>
+                  <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.25"/>
+                </linearGradient>
+                <filter id="glowEffect">
+                  <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                  <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+
+              <rect x="20" y="270" width="80" height="70" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+              <text x="60" y="310" fill="#94a3b8" font-size="11" text-anchor="middle">Inlet Supply</text>
+
+              <path d="M 100,270 L 220,270 L 350,290 L 420,295 L 480,298 L 560,298 L 700,270 L 740,270 L 740,340 L 700,340 L 560,312 L 480,312 L 420,315 L 350,320 L 220,340 L 100,340 Z" 
+                    fill="url(#perspexGradient)" stroke="#38bdf8" stroke-width="2.5"/>
+
+              <rect x="130" y="30" width="560" height="230" fill="#0f172a" stroke="#334155" stroke-width="1.5" rx="6"/>
+              
+              <!-- Static Tapping Points h1 to h6 -->
+              <g class="manometer-col" data-index="1" tabindex="0" role="button" aria-label="Manometer tapping h1">
+                <line x1="170" y1="50" x2="170" y2="270" stroke="#64748b" stroke-width="6" stroke-linecap="round"/>
+                <line id="manWater1" x1="170" y1="90" x2="170" y2="270" stroke="#00f0ff" stroke-width="5" stroke-linecap="round"/>
+                <circle cx="170" cy="270" r="6" fill="#38bdf8" class="hotspot" filter="url(#glowEffect)"/>
+                <text class="man-label" x="170" y="45" fill="#f8fafc" font-size="12" text-anchor="middle" font-weight="bold">h₁</text>
+              </g>
+
+              <g class="manometer-col" data-index="2" tabindex="0" role="button" aria-label="Manometer tapping h2">
+                <line x1="290" y1="50" x2="290" y2="280" stroke="#64748b" stroke-width="6" stroke-linecap="round"/>
+                <line id="manWater2" x1="290" y1="102" x2="290" y2="280" stroke="#00f0ff" stroke-width="5" stroke-linecap="round"/>
+                <circle cx="290" cy="280" r="6" fill="#38bdf8" class="hotspot"/>
+                <text class="man-label" x="290" y="45" fill="#f8fafc" font-size="12" text-anchor="middle" font-weight="bold">h₂</text>
+              </g>
+
+              <g class="manometer-col" data-index="3" tabindex="0" role="button" aria-label="Manometer tapping h3">
+                <line x1="390" y1="50" x2="390" y2="292" stroke="#64748b" stroke-width="6" stroke-linecap="round"/>
+                <line id="manWater3" x1="390" y1="118" x2="390" y2="292" stroke="#00f0ff" stroke-width="5" stroke-linecap="round"/>
+                <circle cx="390" cy="292" r="6" fill="#38bdf8" class="hotspot"/>
+                <text class="man-label" x="390" y="45" fill="#f8fafc" font-size="12" text-anchor="middle" font-weight="bold">h₃</text>
+              </g>
+
+              <g class="manometer-col" data-index="4" tabindex="0" role="button" aria-label="Manometer tapping h4">
+                <line x1="460" y1="50" x2="460" y2="297" stroke="#64748b" stroke-width="6" stroke-linecap="round"/>
+                <line id="manWater4" x1="460" y1="135" x2="460" y2="297" stroke="#00f0ff" stroke-width="5" stroke-linecap="round"/>
+                <circle cx="460" cy="297" r="6" fill="#38bdf8" class="hotspot"/>
+                <text class="man-label" x="460" y="45" fill="#f8fafc" font-size="12" text-anchor="middle" font-weight="bold">h₄</text>
+              </g>
+
+              <g class="manometer-col" data-index="5" tabindex="0" role="button" aria-label="Manometer tapping h5, throat">
+                <line x1="530" y1="50" x2="530" y2="298" stroke="#64748b" stroke-width="6" stroke-linecap="round"/>
+                <line id="manWater5" x1="530" y1="150" x2="530" y2="298" stroke="#00f0ff" stroke-width="5" stroke-linecap="round"/>
+                <circle cx="530" cy="298" r="6" fill="#ff7849" class="hotspot" filter="url(#glowEffect)"/>
+                <text class="man-label" x="530" y="45" fill="#ff7849" font-size="12" text-anchor="middle" font-weight="bold">h₅ (Throat)</text>
+              </g>
+
+              <g class="manometer-col" data-index="6" tabindex="0" role="button" aria-label="Manometer tapping h6, outlet">
+                <line x1="660" y1="50" x2="660" y2="270" stroke="#64748b" stroke-width="6" stroke-linecap="round"/>
+                <line id="manWater6" x1="660" y1="130" x2="660" y2="270" stroke="#00f0ff" stroke-width="5" stroke-linecap="round"/>
+                <circle cx="660" cy="270" r="6" fill="#38bdf8" class="hotspot"/>
+                <text class="man-label" x="660" y="45" fill="#f8fafc" font-size="12" text-anchor="middle" font-weight="bold">h₆</text>
+              </g>
+
+              <g id="hotspotValve" class="hotspot-component" tabindex="0" role="button" aria-label="Discharge Control Gate Valve">
+                <rect x="735" y="280" width="25" height="50" fill="#475569" stroke="#94a3b8" stroke-width="1.5"/>
+                <path d="M 747,280 L 747,250 M 732,250 L 762,250" stroke="#f59e0b" stroke-width="3"/>
+                <circle cx="747" cy="250" r="8" fill="#d97706" opacity="0.6"/>
+                <text x="747" y="240" fill="#f59e0b" font-size="10" text-anchor="middle">Gate Valve</text>
+              </g>
+            </svg>
+          </div>
+
+          <div id="hotspotInfoCard" class="hotspot-info-card">
+            <h4 id="hotspotTitle">Tapping Point h₁</h4>
+            <p id="hotspotDesc">Duct inlet at position 0.00 m. Duct diameter d₁ = 25 mm, Area A₁ = 490.87 × 10⁻⁶ m².</p>
+            <div class="hotspot-meta">
+              <span id="hotspotArea">Area: 490.87 × 10⁻⁶ m²</span>
+              <span id="hotspotDist">Position: 0.00 m</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Procedure Section -->
+    <section id="procedure" class="section-container">
+      <div class="section-header">
+        <span class="section-tag">Methodology</span>
+        <h2>Experimental Procedure</h2>
+      </div>
+
+      <div class="glass-card procedure-stepper-card">
+        <div class="stepper-header">
+          <span class="step-badge" id="stepCounterBadge">Step 1 of 3</span>
+          <div class="stepper-progress-track">
+            <div class="stepper-progress-fill" id="stepperProgressFill" style="width: 33.33%;"></div>
+          </div>
+        </div>
+
+        <div class="step-card-content" id="currentStepContent">
+          <h3 id="stepHeading">Step 1: Open Flow and Bench Control Valves</h3>
+          <p id="stepInstruction" class="step-instruction-text">
+            "The flow and bench control valve is opened parallelly for maximum discharge."
+          </p>
+          <div class="step-apparatus-focus">
+            <strong>Active Component Focus:</strong>
+            <span id="stepActiveComponent">Flow Bench Control Valve &amp; Perspex Duct Inlet</span>
+          </div>
+        </div>
+
+        <div class="stepper-navigation">
+          <button id="prevStepBtn" class="btn btn-secondary" disabled>← Previous</button>
+          <button id="resetStepBtn" class="btn btn-outline">Reset Steps</button>
+          <button id="nextStepBtn" class="btn btn-primary">Next Step →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Virtual Demonstration Section -->
+    <section id="simulation" class="section-container">
+      <div class="section-header">
+        <span class="section-tag">Virtual Demonstration</span>
+        <h2>Fluid Flow &amp; Energy Simulation</h2>
+      </div>
+
+      <div class="simulation-layout glass-card">
+        <div class="simulation-controls-bar">
+          <div class="control-group">
+            <label for="flowSlider">Flow Rate Q (0 to 7 L/min):</label>
+            <input type="range" id="flowSlider" min="0" max="7" step="0.01" value="4.32">
+            <div class="sim-input-row">
+              <input type="number" id="simFlowInput" data-flow-unit="lmin" min="0" max="7" step="0.01" value="4.32" class="sim-num-input" aria-label="Flow rate in liters per minute">
+              <span class="unit-label">L/min</span>
+            </div>
+            <span class="range-val-badge" id="flowValBadge">7.20 × 10⁻⁵ m³/s</span>
+          </div>
+          <div class="control-actions">
+            <button id="simPlayBtn" class="btn btn-primary btn-sm">▶ Play</button>
+            <button id="simPauseBtn" class="btn btn-secondary btn-sm">⏸ Pause</button>
+            <button id="simResetBtn" class="btn btn-outline btn-sm">↺ Reset</button>
+          </div>
+        </div>
+
+        <div class="sim-preset-row">
+          <span class="preset-label">Load a measured run:</span>
+          <button type="button" class="btn btn-outline btn-sm sim-preset" data-run="run1">Run 1 (7.2 × 10⁻⁵ m³/s = 4.32 L/min)</button>
+          <button type="button" class="btn btn-outline btn-sm sim-preset" data-run="run2">Run 2 (9.24 × 10⁻⁵ = 5.54 L/min)</button>
+          <button type="button" class="btn btn-outline btn-sm sim-preset" data-run="run3">Run 3 (10.17 × 10⁻⁵ = 6.10 L/min)</button>
+        </div>
+        <p class="sim-note">Moving the flow slider recomputes h₁–h₆ from a Bernoulli model fitted to the three measured runs (total head is conserved apart from small losses). You can still type your own head readings to override them.</p>
+        <div id="simWarning" class="sim-warning hidden" role="status"></div>
+
+        <!-- Static Head Entry Inputs (h1 to h6) -->
+        <div class="sim-heads-entry-box">
+          <h4>Enter Static Head Readings (h₁ to h₆ in meters):</h4>
+          <div class="sim-heads-grid">
+            <div class="form-group">
+              <label for="simH1">h₁ (m):</label>
+              <input type="number" id="simH1" step="0.001" value="0.190" class="sim-head-input">
+            </div>
+            <div class="form-group">
+              <label for="simH2">h₂ (m):</label>
+              <input type="number" id="simH2" step="0.001" value="0.179" class="sim-head-input">
+            </div>
+            <div class="form-group">
+              <label for="simH3">h₃ (m):</label>
+              <input type="number" id="simH3" step="0.001" value="0.165" class="sim-head-input">
+            </div>
+            <div class="form-group">
+              <label for="simH4">h₄ (m):</label>
+              <input type="number" id="simH4" step="0.001" value="0.150" class="sim-head-input">
+            </div>
+            <div class="form-group">
+              <label for="simH5">h₅ (m):</label>
+              <input type="number" id="simH5" step="0.001" value="0.137" class="sim-head-input">
+            </div>
+            <div class="form-group">
+              <label for="simH6">h₆ (m):</label>
+              <input type="number" id="simH6" step="0.001" value="0.152" class="sim-head-input">
+            </div>
+          </div>
+        </div>
+
+        <div class="canvas-wrapper">
+          <canvas id="simCanvas" width="900" height="360" role="img" aria-label="Venturi duct drawn to scale with flowing particles"></canvas>
+        </div>
+
+        <!-- Real-time Live Chart inside Simulation -->
+        <div class="sim-live-chart-box">
+          <h4>Live Graph: Total Head h<sub>t</sub> (m) vs. Distance into Duct (m)</h4>
+          <div class="sim-chart-container">
+            <canvas id="simLiveChart"></canvas>
+          </div>
+        </div>
+
+        <div class="sim-metrics-panel">
+          <h4>Real-time Computed Parameters Across Conduit Sections (0 to 7 L/min)</h4>
+          <div class="table-responsive">
+            <table class="data-table sim-table">
+              <thead>
+                <tr>
+                  <th>Static Tube</th>
+                  <th>Distance into Duct (m)</th>
+                  <th>Area of Duct A (m²) ×10⁻⁶</th>
+                  <th>Velocity v (m/s)</th>
+                  <th>Static Head h (m)</th>
+                  <th>Dynamic Head h<sub>d</sub> (m) ×10⁻³</th>
+                  <th>Total Head h<sub>t</sub> (m)</th>
+                </tr>
+              </thead>
+              <tbody id="simMetricsTbody">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Custom Manometer Simulation Section (three flow rates) -->
+    <section id="custom-simulation" class="section-container">
+      <div class="section-header">
+        <span class="section-tag">Custom Experiment</span>
+        <h2>Custom Manometer Simulation</h2>
+      </div>
+
+      <div class="simulation-layout glass-card">
+        <p class="small-desc">Choose how many static manometer tappings the duct has (3 to 10), then enter a flow rate Q and your own static head h for every tube, for <strong>three different flow rates</strong>. The comparative graph, tables and inference update instantly using v = Q / A, h<sub>d</sub> = v² / 2g and h<sub>t</sub> = h + h<sub>d</sub> with g = 9.8 m/s². You can print the whole custom experiment, including the graph, as a lab report.</p>
+
+        <div class="simulation-controls-bar custom-controls-bar">
+          <div class="control-group">
+            <label for="customCount">Number of manometers:</label>
+            <select id="customCount" class="custom-select" aria-label="Number of static manometer tappings">
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6" selected>6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+            </select>
+          </div>
+          <div class="control-actions">
+            <button type="button" id="customResetBtn" class="btn btn-outline btn-sm">↺ Reset All Three Runs</button>
+          </div>
+        </div>
+
+        <p class="sim-note" id="customGeometryNote"></p>
+        <div id="customWarning" class="sim-warning hidden" role="status"></div>
+
+        <div class="multi-actions">
+          <button type="button" id="printCustomLogBtn" class="btn btn-primary">🖨 Print Custom Lab Report (Three Flow Rates + Graph)</button>
+        </div>
+
+        <div class="sim-heads-entry-box">
+          <h4>Enter Flow Rate and Static Head Readings (in meters) for each of the three runs:</h4>
+          <div class="custom-runs-grid" id="customRunsGrid"></div>
+        </div>
+
+        <div class="sim-live-chart-box">
+          <h4>Comparative Graph: Total Head h<sub>t</sub> (m) vs. Distance into Duct (m) for Three Flow Rates</h4>
+          <div class="sim-chart-container custom-chart-container">
+            <canvas id="customChart" role="img" aria-label="Scatter graph of total head versus distance into the duct for the three custom flow rates"></canvas>
+          </div>
+        </div>
+
+        <div class="sim-metrics-panel">
+          <h4>Computed Parameters for Your Custom Tappings (one table per flow rate)</h4>
+          <div id="customTablesHost"></div>
+        </div>
+
+        <div class="multi-inference-box" id="customInference" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- NEW SECTION: Whole Experiment Readings for Three Flow Rates -->
+    <section id="multi-experiment" class="section-container">
+      <div class="section-header">
+        <span class="section-tag">Complete Experiment Log</span>
+        <h2>Three Flow Rates Data Entry &amp; Comparative Graph</h2>
+      </div>
+
+      <div class="glass-card multi-exp-card">
+        <p class="small-desc">Enter the full experiment readings (Flow rate Q and static head values h₁ through h₆) for three different flow rates. The comparative chart below will update dynamically according to your entries.</p>
+        
+        <div class="multi-actions">
+          <button type="button" id="printLabLogBtn" class="btn btn-primary">🖨 Print Lab Report (Complete Experiment Log)</button>
+          <button type="button" id="resetMultiBtn" class="btn btn-outline">Restore Manual Readings</button>
+        </div>
+
+        <div class="multi-exp-tables-grid">
+          <!-- Flow Rate 1 -->
+          <div class="flow-run-box">
+            <h4>Flow Rate 1 (Q₁)</h4>
+            <div class="form-group">
+              <label for="multiQ1">Q₁ (×10⁻⁵ m³/s):</label>
+              <input type="number" id="multiQ1" data-flow-unit="e5" step="0.01" value="7.20" class="multi-q-input">
+            </div>
+            <div class="mini-heads-grid">
+              <div><label for="m1_h1">h₁:</label><input type="number" id="m1_h1" step="0.001" value="0.190" class="multi-h-input" data-run="0" data-tube="0"></div>
+              <div><label for="m1_h2">h₂:</label><input type="number" id="m1_h2" step="0.001" value="0.179" class="multi-h-input" data-run="0" data-tube="1"></div>
+              <div><label for="m1_h3">h₃:</label><input type="number" id="m1_h3" step="0.001" value="0.165" class="multi-h-input" data-run="0" data-tube="2"></div>
+              <div><label for="m1_h4">h₄:</label><input type="number" id="m1_h4" step="0.001" value="0.150" class="multi-h-input" data-run="0" data-tube="3"></div>
+              <div><label for="m1_h5">h₅:</label><input type="number" id="m1_h5" step="0.001" value="0.137" class="multi-h-input" data-run="0" data-tube="4"></div>
+              <div><label for="m1_h6">h₆:</label><input type="number" id="m1_h6" step="0.001" value="0.152" class="multi-h-input" data-run="0" data-tube="5"></div>
+            </div>
+          </div>
+
+          <!-- Flow Rate 2 -->
+          <div class="flow-run-box">
+            <h4>Flow Rate 2 (Q₂)</h4>
+            <div class="form-group">
+              <label for="multiQ2">Q₂ (×10⁻⁵ m³/s):</label>
+              <input type="number" id="multiQ2" data-flow-unit="e5" step="0.01" value="9.24" class="multi-q-input">
+            </div>
+            <div class="mini-heads-grid">
+              <div><label for="m2_h1">h₁:</label><input type="number" id="m2_h1" step="0.001" value="0.210" class="multi-h-input" data-run="1" data-tube="0"></div>
+              <div><label for="m2_h2">h₂:</label><input type="number" id="m2_h2" step="0.001" value="0.194" class="multi-h-input" data-run="1" data-tube="1"></div>
+              <div><label for="m2_h3">h₃:</label><input type="number" id="m2_h3" step="0.001" value="0.175" class="multi-h-input" data-run="1" data-tube="2"></div>
+              <div><label for="m2_h4">h₄:</label><input type="number" id="m2_h4" step="0.001" value="0.153" class="multi-h-input" data-run="1" data-tube="3"></div>
+              <div><label for="m2_h5">h₅:</label><input type="number" id="m2_h5" step="0.001" value="0.135" class="multi-h-input" data-run="1" data-tube="4"></div>
+              <div><label for="m2_h6">h₆:</label><input type="number" id="m2_h6" step="0.001" value="0.157" class="multi-h-input" data-run="1" data-tube="5"></div>
+            </div>
+          </div>
+
+          <!-- Flow Rate 3 -->
+          <div class="flow-run-box">
+            <h4>Flow Rate 3 (Q₃)</h4>
+            <div class="form-group">
+              <label for="multiQ3">Q₃ (×10⁻⁵ m³/s):</label>
+              <input type="number" id="multiQ3" data-flow-unit="e5" step="0.01" value="10.17" class="multi-q-input">
+            </div>
+            <div class="mini-heads-grid">
+              <div><label for="m3_h1">h₁:</label><input type="number" id="m3_h1" step="0.001" value="0.230" class="multi-h-input" data-run="2" data-tube="0"></div>
+              <div><label for="m3_h2">h₂:</label><input type="number" id="m3_h2" step="0.001" value="0.208" class="multi-h-input" data-run="2" data-tube="1"></div>
+              <div><label for="m3_h3">h₃:</label><input type="number" id="m3_h3" step="0.001" value="0.185" class="multi-h-input" data-run="2" data-tube="2"></div>
+              <div><label for="m3_h4">h₄:</label><input type="number" id="m3_h4" step="0.001" value="0.155" class="multi-h-input" data-run="2" data-tube="3"></div>
+              <div><label for="m3_h5">h₅:</label><input type="number" id="m3_h5" step="0.001" value="0.132" class="multi-h-input" data-run="2" data-tube="4"></div>
+              <div><label for="m3_h6">h₆:</label><input type="number" id="m3_h6" step="0.001" value="0.162" class="multi-h-input" data-run="2" data-tube="5"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="multi-chart-container-box">
+          <h4>Comparative Graph for Three Flow Rates Readings</h4>
+          <div class="chart-container">
+            <canvas id="multiExpChart"></canvas>
+          </div>
+        </div>
+
+        <div class="multi-inference-box" id="multiInference" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- Observation Table Section -->
+    <section id="observations" class="section-container">
+      <div class="section-header">
+        <span class="section-tag">Laboratory Readings</span>
+        <h2>Observations and Tabulation</h2>
+      </div>
+
+      <div class="glass-card table-wrapper-card">
+        <div class="table-header-controls">
+          <div>
+            <span class="table-title">Observed &amp; Computed Values (Tappings h₁ to h₆)</span>
+            <p class="table-subtitle">Recorded stopwatch collection times: t₁ = 13.87 s, t₂ = 10.82 s, t₃ = 9.83 s.</p>
+          </div>
+          <div class="btn-cluster">
+            <button id="loadSampleRun1Btn" class="btn btn-outline btn-sm">Run 1 (7.2 × 10⁻⁵ m³/s)</button>
+            <button id="loadSampleRun2Btn" class="btn btn-outline btn-sm">Run 2 (9.24 × 10⁻⁵ m³/s)</button>
+            <button id="loadSampleRun3Btn" class="btn btn-outline btn-sm">Run 3 (10.17 × 10⁻⁵ m³/s)</button>
+            <button id="exportCsvBtn" class="btn btn-secondary btn-sm">Download CSV</button>
+            <button id="clearTableBtn" class="btn btn-outline btn-sm text-danger">Clear Table</button>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="data-table observation-table" id="obsTable">
+            <thead>
+              <tr>
+                <th>Flow Rate Q<br><small>(m³/s) ×10⁻⁵</small></th>
+                <th>Static Tube<br><small>Label</small></th>
+                <th>Distance into Duct<br><small>(m)</small></th>
+                <th>Area of Duct A<br><small>(m²) ×10⁻⁶</small></th>
+                <th>Static Head in meter<br><small>h (m)</small></th>
+                <th>Velocity<br><small>v (m/s)</small></th>
+                <th>Dynamic head h<sub>d</sub><br><small>(m) ×10⁻³</small></th>
+                <th>Total head<br><small>h<sub>t</sub> (m)</small></th>
+              </tr>
+            </thead>
+            <tbody id="obsTableBody">
+            </tbody>
+          </table>
+        </div>
+        <div class="compare-block">
+          <h4>All Three Runs Compared (Total Head h<sub>t</sub> in m)</h4>
+          <p class="small-desc">Built from the “Three Flow Rates” readings above. The throat row (h₅) is highlighted.</p>
+          <div class="table-responsive">
+            <table class="data-table" id="compareTable">
+              <thead><tr><th>Tube</th><th>Distance (m)</th><th id="cmpHead1">Run 1</th><th id="cmpHead2">Run 2</th><th id="cmpHead3">Run 3</th></tr></thead>
+              <tbody id="compareTbody"></tbody>
+            </table>
+          </div>
+        </div>
+        <p class="table-foot-note">
+          * Dynamic Head is computed as h<sub>d</sub> = v² / (2g) with g = 9.8 m/s² and presented scaled to ×10⁻³ m as specified in the lab manual column header.
+        </p>
+      </div>
+    </section>
+
+    <!-- Calculation Section -->
+    <section id="calculations" class="section-container">
+      <div class="section-header">
+        <span class="section-tag">Interactive Calculator</span>
+        <h2>Calculations &amp; Formulas</h2>
+      </div>
+
+      <div class="glass-card" style="margin-bottom:1.5rem;">
+        <h3>Discharge Calculator: Q = V / t</h3>
+        <p class="small-desc">Enter the collected volume V (litres) and the three stopwatch times. Q is computed in m³/s and L/min.</p>
+        <div class="qcalc-grid">
+          <div class="form-group"><label for="qcV">Volume V (L)</label><input type="number" id="qcV" step="0.01" min="0" value="1"></div>
+          <div class="form-group"><label for="qcT1">t₁ (s)</label><input type="number" id="qcT1" step="0.01" min="0" value="13.87"></div>
+          <div class="form-group"><label for="qcT2">t₂ (s)</label><input type="number" id="qcT2" step="0.01" min="0" value="10.82"></div>
+          <div class="form-group"><label for="qcT3">t₃ (s)</label><input type="number" id="qcT3" step="0.01" min="0" value="9.83"></div>
+        </div>
+        <div class="qcalc-out" id="qcOut" aria-live="polite"></div>
+        <button type="button" id="qcApplyBtn" class="btn btn-secondary btn-sm">Apply Q₁–Q₃ to the Three-Flow-Rate Log</button>
+      </div>
+
+      <div class="calc-grid">
+        <div class="glass-card formula-reference-card">
+          <h3>Formulas Extracted from Manual</h3>
+          <div class="manual-equations-list">
+            <div class="formula-item">
+              <span class="formula-badge">Discharge:</span>
+              <code>Q = V / t</code>
+              <p>Where V = 1 L = 1 × 10⁻³ m³ is the volume collected and t is the time (t₁ = 13.87 s, t₂ = 10.82 s, t₃ = 9.83 s).</p>
+            </div>
+            <div class="formula-item">
+              <span class="formula-badge">Velocity:</span>
+              <code>v = Q / A</code>
+              <p>Where A is the duct cross-sectional area at that tapping.</p>
+            </div>
+            <div class="formula-item">
+              <span class="formula-badge">Dynamic Head:</span>
+              <code>h<sub>d</sub> = v² / (2g)</code>
+              <p>Dynamic kinetic head evaluated with standard acceleration g = 9.8 m/s².</p>
+            </div>
+            <div class="formula-item">
+              <span class="formula-badge">Total Head:</span>
+              <code>h<sub>t</sub> = h + h<sub>d</sub></code>
+              <p>The sum of static pressure head in meter (h) and dynamic head (h<sub>d</sub>).</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card calc-form-card">
+          <h3>Single-Section Live Calculator</h3>
+          <form id="calcForm" onsubmit="return false;">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="calcVol">Flow Rate Q (×10⁻⁵ m³/s):</label>
+                <input type="number" id="calcVol" data-flow-unit="e5" step="0.01" value="7.20" required>
+                <small class="field-hint">e.g., 7.20, 9.24, 10.17</small>
+              </div>
+              <div class="form-group">
+                <label for="calcDia">Tube Area A (×10⁻⁶ m²):</label>
+                <input type="number" id="calcDia" step="0.01" value="78.54" required>
+                <small class="field-hint">e.g., 490.87 (h₁), 78.54 (h₅ throat)</small>
+              </div>
+              <div class="form-group">
+                <label for="calcStaticHead">Static Head in meter h (m):</label>
+                <input type="number" id="calcStaticHead" step="0.001" value="0.137" required>
+                <small class="field-hint">Piezometer height reading</small>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button id="calcComputeBtn" type="button" class="btn btn-primary">Compute Head Values</button>
+              <button id="calcSampleBtn" type="button" class="btn btn-outline">Load Throat (h₅) Sample</button>
+            </div>
+          </form>
+
+          <div id="calcOutputBlock" class="calc-results-output">
+            <h4>Calculation Steps &amp; Results:</h4>
+            <div class="calc-steps-box" id="calcStepsDetails">
+              <p>Click "Compute Head Values" above to solve step-by-step substitution.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Graphs Section -->
+    <section id="graphs" class="section-container">
+      <div class="section-header">
+        <span class="section-tag">Graphical Representation</span>
+        <h2>Total Head vs. Position of Tube</h2>
+      </div>
+
+      <div class="glass-card graph-card">
+        <div class="graph-toolbar">
+          <div>
+            <h3>Total Head h<sub>t</sub> (m) vs. Distance into Duct (m)</h3>
+            <p>Plots Total Head h<sub>t</sub> (y-axis) against the Position of Tube / Distance from duct (x-axis) across all 3 flow rates recorded in the manual, plus the run currently loaded in the observation table.</p>
+          </div>
+          <div class="graph-actions">
+            <button id="refreshGraphBtn" class="btn btn-outline btn-sm">Refresh Graph</button>
+          </div>
+        </div>
+
+        <div class="chart-toggle-row">
+          <button type="button" id="toggleStaticBtn" class="btn btn-secondary btn-sm" aria-pressed="false">Show static head h (dashed)</button>
+        </div>
+        <div class="chart-container">
+          <canvas id="bernoulliChart"></canvas>
+        </div>
+
+        <div id="graphVerdictBadge" class="graph-verdict-callout">
+          <strong>Graph Analysis:</strong>
+          <span id="graphVerdictText">Loading verification status...</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results Section -->
+    <section id="results" class="section-container">
+      <div class="section-header">
+        <span class="section-tag">Experimental Finding</span>
+        <h2>Experimental Results &amp; Inference</h2>
+      </div>
+
+      <div class="results-grid">
+        <div class="glass-card result-card highlight-border">
+          <h3>Reported Result</h3>
+          <div class="manual-results-box">
+            <p class="result-heading">At minimum cross section of pipe (throat section h<sub>5</sub>):</p>
+            <div class="result-metric-tile">
+              <span class="res-title">Total head value for lower flow rate (Q₁ = 7.2 × 10⁻⁵ m³/s):</span>
+              <span class="res-number">0.180 m</span>
+            </div>
+            <div class="result-metric-tile">
+              <span class="res-title">Total head value for medium flow rate (Q₂ = 9.24 × 10⁻⁵ m³/s):</span>
+              <span class="res-number">0.206 m</span>
+            </div>
+            <div class="result-metric-tile">
+              <span class="res-title">Total head value for higher flow rate (Q₃ = 10.17 × 10⁻⁵ m³/s):</span>
+              <span class="res-number">0.217 m</span>
+            </div>
+            <p class="result-note">Bernoulli's theorem states that total head remains approximately constant <em>along the convergent duct for a specific flow rate</em>.</p>
+          </div>
+
+          <!-- Bernoulli Conservation Index & Percentage -->
+          <div class="agreement-gauge-box">
+            <span class="gauge-label">Total-Head Constancy Index (h₁–h₅)</span>
+            <div class="progress-bar-container">
+              <div class="progress-fill-bar" id="agreementBar" style="width: 0%;">Calculating...</div>
+            </div>
+            <small id="agreementFormula">Constancy = 1 − (h<sub>t,max</sub> − h<sub>t,min</sub>) ÷ h<sub>t,mean</sub>, taken over tappings h₁ to h₅ of the run in the observation table.</small>
+            <div class="agreement-percent-display">
+              Computed Constancy Percentage: <strong id="agreementPercentValue" style="color: var(--cyan-primary);">--%</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card inference-card">
+          <h3>Inference (As stated in Laboratory Manual)</h3>
+          <blockquote class="manual-quote-body">
+            "The experiment verifies Bernoulli's theorem. As the flow passes through the venturi reduced cross-section, the velocity increases and the static pressure decreases. The total head (pressure head + dynamic head) remains approximately constant over the converging and throat section. The variation in h are due to frictional losses and experimental errors."
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quiz Module Section -->
+    <section id="quiz" class="section-container">
+      <div class="section-header">
+        <span class="section-tag">Knowledge Assessment</span>
+        <h2>Laboratory Quiz (Evaluated out of 20 Marks)</h2>
+      </div>
+
+      <div class="glass-card quiz-card">
+        <div class="quiz-top-bar">
+          <div class="quiz-progress-text">
+            Question <span id="currentQNum">1</span> of <span id="totalQCount">5</span>
+          </div>
+          <div class="quiz-score-meter">
+            Score: <span id="quizScore">0</span> / 20 Marks
+          </div>
+        </div>
+
+        <div class="stepper-progress-track">
+          <div id="quizProgressBar" class="stepper-progress-fill" style="width: 20%;"></div>
+        </div>
+
+        <div id="quizQuestionBox" class="quiz-question-box">
+          <h3 id="quizQuestionText">Loading Question...</h3>
+          <div id="quizOptionsContainer" class="quiz-options-list">
+          </div>
+        </div>
+
+        <div id="quizExplanationBox" class="quiz-explanation-callout hidden">
+          <h4 id="explanationTitle">Explanation:</h4>
+          <p id="explanationText"></p>
+        </div>
+
+        <div id="quizResultBox" class="quiz-result-box hidden" aria-live="polite"></div>
+
+        <div class="quiz-bottom-actions">
+          <button id="quizNextBtn" class="btn btn-primary" style="display:none;">Next Question →</button>
+          <button id="quizRestartBtn" class="btn btn-outline" style="display:none;">Restart Quiz</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Conclusion Section -->
+    <section id="conclusion" class="section-container">
+      <div class="section-header">
+        <span class="section-tag">Summary</span>
+        <h2>Final Academic Conclusion</h2>
+      </div>
+
+      <div class="glass-card content-card conclusion-block">
+        <p>
+          Bernoulli's Theorem has been successfully verified using the perspex tube Venturi apparatus and digital hydraulics bench. The conversion between static pressure head and dynamic kinetic energy head follows the conservation of energy principle across converging tappings h<sub>1</sub> through h<sub>5</sub>.
+        </p>
+        <div class="submission-actions">
+          <button id="printReportBtn" class="btn btn-primary">🖨 Print Full Web Page</button>
+          <button id="printLabLogBtn2" class="btn btn-secondary">🖨 Print Complete Experiment Log Report</button>
+          <button id="resetAllDataBtn" class="btn btn-outline text-danger">Reset All Stored Lab Data (readings, quiz best score, name)</button>
+        </div>
+      </div>
+    </section>
+    <!-- End Credits + Task Division -->
+    <section id="credits" class="section-container">
+      <div class="section-header">
+        <span class="section-tag">End Credits</span>
+        <h2>Project Team &amp; Task Division</h2>
+      </div>
+
+      <div class="credits-stage" tabindex="0" aria-label="Scrolling end credits. Hover or focus to pause.">
+        <div class="credits-roll">
+          <h3>Verification of Bernoulli’s Theorem</h3>
+          <p class="c-id">Fluid Mechanics and Machinery • Experiment No: 4 • 2026 - 2027</p>
+          <p class="c-role">Team Leader</p>
+          <p class="c-name">Harsh Sarda</p><p class="c-id">25BME0088</p>
+          <p class="c-role">Team Member</p>
+          <p class="c-name">Jaival Desai</p><p class="c-id">25BME0048</p>
+          <p class="c-role">Team Member</p>
+          <p class="c-name">Moksh Patel</p><p class="c-id">25BME0047</p>
+          <p class="c-role">Built With</p>
+          <p class="c-name">HTML • CSS • JavaScript • Chart.js</p>
+          <p class="c-thanks">Thank you for visiting our virtual laboratory.</p>
+        </div>
+      </div>
+
+      <div class="team-grid">
+        <article class="glass-card team-card">
+          <div class="member-top">
+            <span class="avatar" aria-hidden="true">HS</span>
+            <div><h4>Harsh Sarda</h4><p class="reg">25BME0088</p><span class="role-pill">Team Leader</span></div>
+          </div>
+          <ul>
+            <li>Project planning and task allocation</li>
+            <li>Design of the webpage components</li>
+            <li>Reviewed the webpage for errors</li>
+            <li>Final report and submission</li>
+          </ul>
+        </article>
+        <article class="glass-card team-card">
+          <div class="member-top">
+            <span class="avatar" aria-hidden="true">JD</span>
+            <div><h4>Jaival Desai</h4><p class="reg">25BME0048</p><span class="role-pill">Team Member</span></div>
+          </div>
+          <ul>
+            <li>Making of the web page, considering all the suggestions received from Harsh and Moksh on design</li>
+            <li>Adding of the different components</li>
+            <li>Organisation of the set of values to be given as input</li>
+          </ul>
+        </article>
+        <article class="glass-card team-card">
+          <div class="member-top">
+            <span class="avatar" aria-hidden="true">MP</span>
+            <div><h4>Moksh Patel</h4><p class="reg">25BME0047</p><span class="role-pill">Team Member</span></div>
+          </div>
+          <ul>
+            <li>Webpage layout and visual design</li>
+            <li>Apparatus diagram and procedure presentation</li>
+            <li>Theory and quiz content</li>
+            <li>Testing and print layout</li>
+          </ul>
+        </article>
+      </div>
+      <p class="tools-note">Built with Chart.js and Google Fonts (Montserrat, Poppins).</p>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="lab-footer">
+    <div class="footer-inner">
+      <div class="footer-branding">
+        <h4>Verification of Bernoulli’s Theorem Lab</h4>
+        <p>Department of Mechanical Engineering • Fluid Mechanics Laboratory Record</p>
+        <p class="footer-meta-note">Content updated based on laboratory observation record (Signed 07/08/26).</p>
+      </div>
+
+      <div class="student-submission-box">
+        <div class="meta-field"><strong>Student Name:</strong> <span class="editable-field" id="fieldName" contenteditable="true" role="textbox" aria-label="Student name" data-placeholder="Click to enter name"></span></div>
+        <div class="meta-field"><strong>Register Number:</strong> <span class="editable-field" id="fieldRoll" contenteditable="true" role="textbox" aria-label="Register number" data-placeholder="Click to enter reg no."></span></div>
+        <div class="meta-field"><strong>Course / Dept:</strong> <span>Fluid Mechanics and Machinery</span></div>
+        <div class="meta-field"><strong>Academic Year:</strong> <span>2026 - 2027</span></div>
+      </div>
+
+      <div class="footer-bottom-row">
+        <span>© 2026 Virtual Fluid Mechanics Laboratory. All rights reserved.</span>
+        <a href="#hero" class="back-to-top-btn">Back to Top ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <div id="labReportPrint" aria-hidden="true"></div>
+
+  <script src="script.js"></script>
+  <script>
+    (function () {
+      ['fieldName', 'fieldRoll'].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        try { el.textContent = localStorage.getItem('bl_' + id) || ''; } catch (e) {}
+        el.addEventListener('input', function () {
+          try { localStorage.setItem('bl_' + id, el.textContent.trim()); } catch (e) {}
+        });
+        el.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); el.blur(); } });
+      });
+    })();
+  </script>
+</body>
+</html>
